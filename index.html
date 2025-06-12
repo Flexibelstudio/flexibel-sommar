@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" /> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sommarutmaning 2025!</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Avenir', 'Open Sans', 'Lato', sans-serif;
+      overflow-x: hidden; /* Prevent horizontal scroll if confetti goes wide */
+    }
+    .flexibel-turquoise { color: #51A1A1; }
+    .bg-flexibel-turquoise { background-color: #51A1A1; }
+
+    #animation-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none; /* Allows clicks to pass through */
+      z-index: 9999; /* Ensure it's on top */
+      overflow: hidden;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes floatUpAndFade {
+      0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-150px) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* Styles for encouragement messages */
+    .encouragement-message-base {
+      display: inline-block;
+      color: white;
+      font-weight: bold;
+      padding: 0.9375rem 1.5625rem; /* Increased padding */
+      border-radius: 0.75rem; /* Tailwind rounded-xl */
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    }
+
+    .encouragement-message-normal {
+      background-color: #51A1A1; /* Flexibel Turquoise */
+      animation: pulseSoft 2s infinite ease-in-out;
+      font-size: 1.875rem; /* Increased from 1.5rem */
+    }
+    @media (min-width: 640px) { /* sm */
+      .encouragement-message-normal {
+        font-size: 2.34375rem; /* Increased from 1.875rem */
+      }
+    }
+     @media (min-width: 1024px) { /* lg */
+      .encouragement-message-normal {
+        font-size: 2.8125rem; /* Increased from 2.25rem */
+      }
+    }
+
+
+    .encouragement-message-high {
+      background-color: tomato;
+      animation: pulseStrong 1.5s infinite ease-in-out, flashBorder 2s infinite linear;
+      font-size: 2.34375rem; /* Increased from 1.875rem */
+      padding: 1.25rem 2.1875rem; /* Increased padding */
+      border: 3px solid transparent;
+    }
+     @media (min-width: 640px) { /* sm */
+      .encouragement-message-high {
+        font-size: 2.8125rem; /* Increased from 2.25rem */
+      }
+    }
+    @media (min-width: 1024px) { /* lg */
+      .encouragement-message-high {
+         font-size: 3.125rem; /* Increased from 2.5rem */
+      }
+    }
+
+
+    @keyframes pulseSoft {
+      0%, 100% { opacity: 0.9; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.03); }
+    }
+
+    @keyframes pulseStrong {
+      0%, 100% { opacity: 0.95; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+
+    @keyframes flashBorder {
+      0% { border-color: #FFEB3B; } /* Yellow */
+      25% { border-color: #FF9800; } /* Orange */
+      50% { border-color: #F44336; } /* Red */
+      75% { border-color: #E91E63; } /* Pink */
+      100% { border-color: #FFEB3B; } /* Back to Yellow */
+    }
+
+    /* New animation for Flexibel AI Bartender loading */
+    @keyframes flexibelAiPulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 5px #FF69B4); /* Pinkish glow for bartender */
+      }
+      50% {
+        transform: scale(1.08);
+        filter: drop-shadow(0 0 15px #FF69B4);
+      }
+    }
+    .flexibel-ai-loading-animation { /* Renamed class */
+      animation: flexibelAiPulse 2s infinite ease-in-out;
+    }
+
+    /* Streak Fire Icon Animations - Enhanced based on user feedback */
+    @keyframes pulseSoftFire { /* Level 1: Orange */
+      0%, 100% { transform: scale(1); opacity: 0.7; filter: drop-shadow(0 0 2px currentColor); }
+      50% { transform: scale(1.12); opacity: 1; filter: drop-shadow(0 0 5px currentColor); }
+    }
+    .animate-pulseSoftFire { animation: pulseSoftFire 2s infinite ease-in-out; }
+
+    @keyframes pulseMediumFire { /* Level 2: Lighter Red */
+      0%, 100% { transform: scale(1); opacity: 0.75; filter: drop-shadow(0 0 4px currentColor); }
+      50% { transform: scale(1.22); opacity: 1; filter: drop-shadow(0 0 10px currentColor); }
+    }
+    .animate-pulseMediumFire { animation: pulseMediumFire 1.7s infinite ease-in-out; }
+
+    @keyframes pulseStrongFire { /* Level 3: Deeper Red */
+      0%, 100% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 6px currentColor); }
+      50% { transform: scale(1.35); opacity: 1; filter: drop-shadow(0 0 18px currentColor); }
+    }
+    .animate-pulseStrongFire { animation: pulseStrongFire 1.4s infinite ease-in-out; }
+
+    /* Progress Sparks Animation */
+    @keyframes spark-animation {
+      0% {
+        transform: scale(0.5) translate(-50%, -50%);
+        opacity: 1;
+      }
+      50% {
+        /* Sparks burst outwards slightly randomly */
+        transform: scale(1.3) translate(calc(-50% + var(--spark-dx, 0px)), calc(-50% + var(--spark-dy, 0px)));
+        opacity: 0.7;
+      }
+      100% {
+        /* Sparks fly further and fade */
+        transform: scale(0) translate(calc(-50% + var(--spark-dx-end, 0px)), calc(-50% + var(--spark-dy-end, 0px)));
+        opacity: 0;
+      }
+    }
+
+    .progress-spark-particle {
+      position: absolute;
+      top: 50%; /* Relative to the sparks container, which is centered on the bar's height */
+      left: 0;  /* Relative to the sparks container, which is at the tip of the progress */
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      pointer-events: none;
+      animation-name: spark-animation;
+      animation-duration: 0.6s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+    }
+
+    /* Level Up Specific Animations */
+    @keyframes kettlebell-swing-in-out {
+      0% { transform: translateX(-120px) rotate(-35deg) scale(0.3); opacity: 0; }
+      20% { transform: translateX(0) rotate(20deg) scale(1); opacity: 1; }
+      35% { transform: translateX(0) rotate(-15deg) scale(1); }
+      50% { transform: translateX(0) rotate(10deg) scale(1); }
+      65% { transform: translateX(0) rotate(-5deg) scale(1); }
+      80% { transform: translateX(0) rotate(0deg) scale(1); opacity: 1; }
+      100% { transform: translateX(120px) rotate(35deg) scale(0.3); opacity: 0; }
+    }
+    .animate-kettlebell-level-up {
+      animation: kettlebell-swing-in-out 2.8s ease-in-out forwards;
+    }
+
+    @keyframes footstep-stomp-fade {
+      0% { transform: translateY(60px) scale(0.4); opacity: 0; }
+      30% { transform: translateY(0) scale(1.25); opacity: 1; } /* Stomp effect */
+      50% { transform: translateY(0) scale(1.1); opacity: 1; } /* Settle */
+      100% { transform: translateY(-20px) scale(1.1); opacity: 0; } /* Fade up and out */
+    }
+    .animate-footstep-level-up {
+      animation: footstep-stomp-fade 2.2s ease-out forwards;
+    }
+
+    /* Easter Egg: Hidden Star Icon */
+    .hidden-star-icon-container {
+      position: relative; /* Or the parent element that should contain the star */
+      /* min-height: 50px; Ensure container has some height if star is at bottom */
+    }
+    .hidden-star-icon {
+      position: absolute;
+      bottom: 0.75rem; /* 12px */
+      right: 0.75rem; /* 12px */
+      color: #D1D5DB; /* Tailwind gray-300 */
+      transition: color 0.2s ease-in-out, transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+      cursor: pointer;
+      z-index: 10; /* Ensure it's clickable */
+    }
+    .hidden-star-icon:hover {
+      color: #FACC15; /* Tailwind yellow-400 */
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 5px #FACC15);
+    }
+    
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "@google/genai": "https://esm.sh/@google/genai"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-white text-gray-800 text-lg">
+  <div id="animation-container"></div>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
