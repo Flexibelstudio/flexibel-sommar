@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sommarutmaning 2025!</title>
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@^19.1.0",
+      "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+      "react/": "https://esm.sh/react@^19.1.0/",
+      "@google/genai": "https://esm.sh/@google/genai@^1.5.1"
+    }
+  }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3XC67VZZYH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3XC67VZZYH');
+  </script>
+  <!-- End Google Analytics -->
+  <style>
+    body {
+      font-family: 'Avenir', 'Open Sans', 'Lato', sans-serif;
+      overflow-x: hidden; /* Prevent horizontal scroll if confetti goes wide */
+    }
+    .flexibel-turquoise { color: #51A1A1; }
+    .bg-flexibel-turquoise { background-color: #51A1A1; }
+
+    #animation-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none; /* Allows clicks to pass through */
+      z-index: 9999; /* Ensure it's on top */
+      overflow: hidden;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes floatUpAndFade {
+      0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-150px) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* New animation for Flexibel AI Bartender loading */
+    @keyframes flexibelAiPulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 5px #FF69B4); /* Pinkish glow for bartender */
+      }
+      50% {
+        transform: scale(1.08);
+        filter: drop-shadow(0 0 15px #FF69B4);
+      }
+    }
+    .flexibel-ai-loading-animation { /* Renamed class */
+      animation: flexibelAiPulse 2s infinite ease-in-out;
+    }
+
+    /* Streak Fire Icon Animations - Enhanced based on user feedback */
+    @keyframes pulseSoftFire { /* Level 1: Orange */
+      0%, 100% { transform: scale(1); opacity: 0.7; filter: drop-shadow(0 0 2px currentColor); }
+      50% { transform: scale(1.12); opacity: 1; filter: drop-shadow(0 0 5px currentColor); }
+    }
+    .animate-pulseSoftFire { animation: pulseSoftFire 2s infinite ease-in-out; }
+
+    @keyframes pulseMediumFire { /* Level 2: Lighter Red */
+      0%, 100% { transform: scale(1); opacity: 0.75; filter: drop-shadow(0 0 4px currentColor); }
+      50% { transform: scale(1.22); opacity: 1; filter: drop-shadow(0 0 10px currentColor); }
+    }
+    .animate-pulseMediumFire { animation: pulseMediumFire 1.7s infinite ease-in-out; }
+
+    @keyframes pulseStrongFire { /* Level 3: Deeper Red */
+      0%, 100% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 6px currentColor); }
+      50% { transform: scale(1.35); opacity: 1; filter: drop-shadow(0 0 18px currentColor); }
+    }
+    .animate-pulseStrongFire { animation: pulseStrongFire 1.4s infinite ease-in-out; }
+
+    /* Progress Sparks Animation */
+    @keyframes spark-animation {
+      0% {
+        transform: scale(0.5) translate(-50%, -50%);
+        opacity: 1;
+      }
+      50% {
+        /* Sparks burst outwards slightly randomly */
+        transform: scale(1.3) translate(calc(-50% + var(--spark-dx, 0px)), calc(-50% + var(--spark-dy, 0px)));
+        opacity: 0.7;
+      }
+      100% {
+        /* Sparks fly further and fade */
+        transform: scale(0) translate(calc(-50% + var(--spark-dx-end, 0px)), calc(-50% + var(--spark-dy-end, 0px)));
+        opacity: 0;
+      }
+    }
+
+    .progress-spark-particle {
+      position: absolute;
+      top: 50%; /* Relative to the sparks container, which is centered on the bar's height */
+      left: 0;  /* Relative to the sparks container, which is at the tip of the progress */
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      pointer-events: none;
+      animation-name: spark-animation;
+      animation-duration: 0.6s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+    }
+
+    /* Level Up Specific Animations */
+    @keyframes kettlebell-swing-in-out {
+      0% { transform: translateX(-120px) rotate(-35deg) scale(0.3); opacity: 0; }
+      20% { transform: translateX(0) rotate(20deg) scale(1); opacity: 1; }
+      35% { transform: translateX(0) rotate(-15deg) scale(1); }
+      50% { transform: translateX(0) rotate(10deg) scale(1); }
+      65% { transform: translateX(0) rotate(-5deg) scale(1); }
+      80% { transform: translateX(0) rotate(0deg) scale(1); opacity: 1; }
+      100% { transform: translateX(120px) rotate(35deg) scale(0.3); opacity: 0; }
+    }
+    .animate-kettlebell-level-up {
+      animation: kettlebell-swing-in-out 2.8s ease-in-out forwards;
+    }
+
+    @keyframes footstep-stomp-fade {
+      0% { transform: translateY(60px) scale(0.4); opacity: 0; }
+      30% { transform: translateY(0) scale(1.25); opacity: 1; } /* Stomp effect */
+      50% { transform: translateY(0) scale(1.1); opacity: 1; } /* Settle */
+      100% { transform: translateY(-20px) scale(1.1); opacity: 0; } /* Fade up and out */
+    }
+    .animate-footstep-level-up {
+      animation: footstep-stomp-fade 2.2s ease-out forwards;
+    }
+
+    /* Easter Egg: Hidden Star Icon */
+    .hidden-star-icon-container {
+      position: relative; /* Or the parent element that should contain the star */
+      /* min-height: 50px; Ensure container has some height if star is at bottom */
+    }
+    .hidden-star-icon {
+      position: absolute;
+      bottom: 0.75rem; /* 12px */
+      right: 0.75rem; /* 12px */
+      color: #D1D5DB; /* Tailwind gray-300 */
+      transition: color 0.2s ease-in-out, transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+      cursor: pointer;
+      z-index: 10; /* Ensure it's clickable */
+    }
+    .hidden-star-icon:hover {
+      color: #FACC15; /* Tailwind yellow-400 */
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 5px #FACC15);
+    }
+
+    /* FAB Styles */
+    .fab-container {
+      position: fixed;
+      bottom: 4.5rem; /* Adjusted to be above footer (approx 3.25rem footer + 1.25rem spacing) */
+      right: 1.5rem;  /* Standard FAB spacing from edge */
+      z-index: 1050;
+      display: none; /* Hide by default */
+      flex-direction: column-reverse; /* Menu items appear above FAB */
+      align-items: flex-end; /* Align menu block to the right, above FAB */
+    }
+
+    /* Show FAB ONLY on Home view */
+    body.view-HOME .fab-container {
+      display: flex !important; /* Explicitly show and use flex */
+    }
+
+    .fab-button {
+      background-color: #F97316; /* Tailwind orange-500 */
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15), 0 0 6px rgba(0,0,0,0.05);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease;
+      cursor: pointer;
+      border: none;
+      outline: none;
+    }
+    .fab-button:hover {
+      background-color: #EA580C; /* Tailwind orange-600 */
+    }
+    .fab-button.open {
+      transform: rotate(135deg); /* + to x */
+      background-color: #c2410c; /* Tailwind orange-700 */
+    }
+    .fab-button svg {
+        width: 32px;
+        height: 32px;
+        transition: transform 0.3s ease;
+    }
+
+    .fab-menu {
+      display: none; /* Initially hidden and removed from layout/interaction */
+      opacity: 0; /* Start fully transparent for transition if display was animatable (it's not directly) */
+      flex-direction: column;
+      align-items: flex-end;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+    .fab-menu.open {
+      display: flex; /* Make it part of the layout when open */
+      opacity: 1; /* Fade in the container (optional, items have own opacity) */
+    }
+
+    .fab-menu .fab-menu-item-wrapper {
+      opacity: 0;
+      transform: translateY(15px) scale(0.9); /* Start lower, scale down */
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Added custom bezier for bounce */
+      pointer-events: none; /* Items are not interactive by default */
+    }
+
+    .fab-menu.open .fab-menu-item-wrapper {
+      opacity: 1;
+      transform: translateY(0) scale(1); /* Settle at normal position */
+      pointer-events: auto; /* Items become interactive when menu is open and they are visible */
+    }
+
+    .fab-menu-item {
+      display: flex;
+      align-items: center;
+      background-color: white;
+      color: #374151; /* gray-700 */
+      padding: 10px 18px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s ease-out;
+      white-space: nowrap;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .fab-menu-item:hover {
+      background-color: #f0fdf4;
+      transform: translateY(-1px);
+    }
+    .fab-menu-item:disabled {
+        background-color: #e5e7eb;
+        color: #9ca3af;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+    .fab-menu-item:disabled:hover {
+        background-color: #e5e7eb;
+        transform: translateY(0);
+    }
+
+    .fab-menu-item svg {
+      margin-right: 10px;
+      width: 22px;
+      height: 22px;
+    }
+    .fab-menu-item.warmup-item { color: #c2410c; }
+    .fab-menu-item.warmup-item:hover { background-color: #fff7ed; }
+    .fab-menu-item.kb-item { color: #1d4ed8; }
+    .fab-menu-item.kb-item:hover { background-color: #eff6ff; }
+    .fab-menu-item.bw-item { color: #15803d; }
+    .fab-menu-item.bw-item:hover { background-color: #f0fdf4; }
+    .fab-menu-item.bartender-item { color: #a21caf; }
+    .fab-menu-item.bartender-item:hover { background-color: #fdf4ff; }
+    .fab-menu-item.walk-item { color: #0f766e; }
+    .fab-menu-item.walk-item:hover { background-color: #f0fdfa; }
+
+
+    .fab-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(2px);
+      z-index: 1040;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .fab-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-white text-gray-800 text-lg">
+  <div id="root"></div>
+  <div id="animation-container"></div>
+  <script type="module" src="./index.tsx"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
