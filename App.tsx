@@ -1,3 +1,16 @@
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+  }
+}
+
+import {
+  trackUsernameEntered,
+  trackChallengeStarted,
+  trackChallengeCompleted,
+  trackLevelUp,
+  trackAwardReceived
+} from './analytics';
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Workout, View, ExercisePhaseType, WorkoutFormat, Level, DiplomaData, CurrentWorkoutCompletionData, PostWarmUpPromptViewProps, WalkingLogEntry, WorkoutLogEntry, CurrentWalkingCompletionData, WalkingDiplomaData, SummerStatusLevel, AchievementCheckData, LogWalkFormData } from './types';
@@ -180,7 +193,19 @@ export const App: React.FC = () => {
     }
     setCurrentSummerStatusLevelName(statusName);
 
-  }, []);
+// 🔥 Lägg in direkt här, fortfarande inne i useCallback:
+
+const previouslyLoggedAchievements = localStorageService.getLoggedAchievements() || [];
+
+const newAchievements = earnedAchievementIds.filter(id => !previouslyLoggedAchievements.includes(id));
+
+newAchievements.forEach(achievementId => {
+    trackAwardReceived(achievementId);
+});
+
+localStorageService.saveLoggedAchievements([...previouslyLoggedAchievements, ...newAchievements]);
+
+}, []);  // <-- detta avslutar useCallback
 
 
   useEffect(() => {
@@ -282,6 +307,10 @@ export const App: React.FC = () => {
             value: newTotalWorkouts, 
         });
 
+        // GA-spårning till Google Analytics 4:
+        trackChallengeCompleted(completedWorkoutObject.title);
+
+
         if (didLevelUp) {
             analyticsService.trackEvent('level_up', {
                 event_category: 'user_progression',
@@ -289,6 +318,10 @@ export const App: React.FC = () => {
                 level_name: levelAfter.name,
                 value: newTotalWorkouts, 
             });
+
+            // 👉 Lägg till:
+trackLevelUp(levelAfter.name);
+
         }
 
       } else {
@@ -387,6 +420,10 @@ export const App: React.FC = () => {
                 value: currentChallengeDayValue, 
             });
 
+            // 👉 Lägg till:
+trackChallengeCompleted(`Promenad dag ${currentChallengeDayValue}`);
+
+
             if (didWalkingLevelUp) {
                 analyticsService.trackEvent('level_up', {
                     event_category: 'user_progression',
@@ -394,6 +431,10 @@ export const App: React.FC = () => {
                     level_name: walkingLevelAfter.name,
                     value: currentChallengeDayValue, 
                 });
+
+                // 👉 Lägg till:
+trackLevelUp(walkingLevelAfter.name);
+
             }
         }
 
@@ -515,6 +556,7 @@ export const App: React.FC = () => {
             method: 'app_onboarding',
             user_name_provided: !!trimmedName, 
         });
+        trackUsernameEntered(trimmedName);
     }
   };
 

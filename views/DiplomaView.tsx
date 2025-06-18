@@ -5,6 +5,7 @@ import { APP_STRINGS } from '../constants';
 import { Button } from '../components/Button';
 import { ShareIcon, CertificateIcon, StarIcon, SparklesIcon, TrophyIcon, XCircleIcon } from '../components/Icons'; // Added XCircleIcon, removed ArrowLeftIcon
 import { triggerHeartsAnimation } from '../utils/animations';
+import { incrementDiplomaShareCount } from '../services/localStorageService';
 
 interface DiplomaViewProps {
   diplomaData: DiplomaData;
@@ -71,6 +72,8 @@ export const DiplomaView = ({ diplomaData, onNavigate, previousView }: DiplomaVi
           url: window.location.origin + window.location.pathname, 
         });
         triggerHeartsAnimation();
+        incrementDiplomaShareCount();
+
       } catch (error: any) { 
         if (error.name === 'AbortError') {
           console.log('Share operation cancelled by the user.');
@@ -81,12 +84,15 @@ export const DiplomaView = ({ diplomaData, onNavigate, previousView }: DiplomaVi
                 await navigator.clipboard.writeText(shareText);
                 alert(`${APP_STRINGS.linkCopiedToClipboard}\n\n${shareText}`);
                 triggerHeartsAnimation();
+                incrementDiplomaShareCount();
               } catch (clipboardErr) {
                 console.error('Error copying to clipboard after share error:', clipboardErr);
                 alert(shareText); 
+                incrementDiplomaShareCount();
               }
           } else {
               alert(shareText); 
+              incrementDiplomaShareCount();
           }
         }
       }
@@ -98,9 +104,11 @@ export const DiplomaView = ({ diplomaData, onNavigate, previousView }: DiplomaVi
       } catch (err) {
         console.error('Error copying to clipboard:', err);
         alert(shareText); 
+        incrementDiplomaShareCount();
       }
     } else {
         alert(shareText); 
+        incrementDiplomaShareCount();
     }
   };
 

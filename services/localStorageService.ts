@@ -4,6 +4,7 @@
 const APP_SHARE_COUNT_KEY = 'flexibelHalsostudioAppShareCount';
 const FOURTH_SHARE_EASTER_EGG_SHOWN_KEY = 'flexibelHalsostudioFourthShareEasterEggShown';
 const WALKING_CHALLENGE_LAST_COMPLETION_DATE_KEY = 'flexibelHalsostudioWalkingLastDate';
+const DIPLOMA_SHARE_COUNT_KEY = 'flexibelHalsostudioDiplomaShareCount';
 
 // --- App Share Count ---
 export const getAppShareCount = (): number => {
@@ -13,13 +14,44 @@ export const getAppShareCount = (): number => {
 
 export const incrementAppShareCount = (): void => {
   const currentCount = getAppShareCount();
-  localStorage.setItem(APP_SHARE_COUNT_KEY, (currentCount + 1).toString());
+  const newCount = currentCount + 1;
+  localStorage.setItem(APP_SHARE_COUNT_KEY, newCount.toString());
+
+  // Skicka event till Google Analytics
+  if (window.gtag) {
+    window.gtag('event', 'app_shared', {
+      event_category: 'sharing',
+      event_action: 'app_shared',
+      share_count: newCount
+    });
+  }
 };
 
 // --- Fourth Share Easter Egg Modal Shown ---
 export const hasFourthShareEasterEggBeenShown = (): boolean => {
   return localStorage.getItem(FOURTH_SHARE_EASTER_EGG_SHOWN_KEY) === 'true';
 };
+
+export const getDiplomaShareCount = (): number => {
+  const count = localStorage.getItem(DIPLOMA_SHARE_COUNT_KEY);
+  return count ? parseInt(count, 10) : 0;
+};
+
+export const incrementDiplomaShareCount = (): void => {
+  const currentCount = getDiplomaShareCount();
+  const newCount = currentCount + 1;
+  localStorage.setItem(DIPLOMA_SHARE_COUNT_KEY, newCount.toString());
+
+  // Skicka event till Google Analytics
+  if (window.gtag) {
+    window.gtag('event', 'diploma_shared', {
+      event_category: 'sharing',
+      event_action: 'diploma_shared',
+      share_count: newCount
+    });
+  }
+};
+
 
 // Exporting the function as named in the import statement of HomeView.tsx
 export const setFourthShareEasterEggBeenShown = (): void => {
@@ -185,3 +217,12 @@ export const getCurrentWalkingLevel = (): any => {
     // return getWalkingLevelUtilFunc(completedDays);
     return { name: "Promenad-Pionjär", minDays: 0 }; // Placeholder
 };
+
+export function getLoggedAchievements(): string[] | null {
+  const data = localStorage.getItem('loggedAchievements');
+  return data ? JSON.parse(data) : [];
+}
+
+export function saveLoggedAchievements(achievements: string[]): void {
+  localStorage.setItem('loggedAchievements', JSON.stringify(achievements));
+}
