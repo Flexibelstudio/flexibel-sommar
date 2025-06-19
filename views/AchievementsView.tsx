@@ -333,14 +333,14 @@ export const AchievementsView: React.FC<AchievementsViewProps> = ({
             className={`${tabButtonBaseStyle} ${activeTab === 'workoutLevels' ? activeTabStyle : inactiveTabStyle}`}
             aria-pressed={activeTab === 'workoutLevels'}
           >
-            Träningsnivåer
+            Träning
           </button>
           <button 
             onClick={() => setActiveTab('walkingLevels')} 
             className={`${tabButtonBaseStyle} ${activeTab === 'walkingLevels' ? activeTabStyle : inactiveTabStyle}`}
             aria-pressed={activeTab === 'walkingLevels'}
           >
-            Promenadnivåer
+            Promenader
           </button>
         </div>
 
